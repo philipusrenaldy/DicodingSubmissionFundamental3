@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ConsumerApp</string>
+    <string name="username">Username</string>
+    <string name="name">Name</string>
+    <string name="location">Location : \n%s </string>
+    <string name="repository">Repository : \n%s </string>
+    <string name="company">Company : \n%s </string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="githubLogo">GithubLogo</string>
+    <string name="setting">Setting</string>
+    <string name="back_button">Back Button</string>
+    <string name="favorite">Favorite</string>
+</resources>

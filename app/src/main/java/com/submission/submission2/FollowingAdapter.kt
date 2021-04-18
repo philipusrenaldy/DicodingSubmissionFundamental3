@@ -10,32 +10,32 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.submission.submission2.databinding.FragmentlayoutBinding
 
-class FollowingAdapter(private val datalist: ArrayList<UserData>) : RecyclerView.Adapter<FollowingAdapter.Holder>()
+class FollowingAdapter(private val datalist: ArrayList<DataUser>) : RecyclerView.Adapter<FollowingAdapter.Holder>()
 {
     private lateinit var maincontext: Context
 
     inner class Holder(private val bind: FragmentlayoutBinding) : RecyclerView.ViewHolder(bind.root) {
-        fun bind(data: UserData) {
+        fun bind(dataUser: DataUser) {
             with(bind) {
                 Glide.with(itemView.context)
-                    .load(data.avatar)
-                    .apply(RequestOptions().override(55, 55))
+                    .load(dataUser.avatar)
                     .into(avatar)
-                username.text = data.username
-                name.text = data.name
-                location.text = data.location
+                username.text = dataUser.username
+                name.text = dataUser.name
+                location.text = dataUser.location
                 itemView.setOnClickListener {
-                    val userdata = UserData(
-                        data.username,
-                        data.name,
-                        data.avatar,
-                        data.company,
-                        data.location,
-                        data.repository,
-                        data.followers,
-                        data.following
+                    val userdata = DataUser(
+                            dataUser.id,
+                            dataUser.username,
+                            dataUser.name,
+                            dataUser.avatar,
+                            dataUser.company,
+                            dataUser.location,
+                            dataUser.repository,
+                            dataUser.followers,
+                            dataUser.following
                     )
-                    Toast.makeText(maincontext, data.username, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(maincontext, dataUser.username, Toast.LENGTH_SHORT).show()
                     val intent = Intent(maincontext, UserDetail::class.java)
                     intent.putExtra(UserDetail.EXTRA_DATA, userdata)
                     maincontext.startActivity(intent)

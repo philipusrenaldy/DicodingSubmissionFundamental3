@@ -13,10 +13,10 @@ import com.submission.submission2.databinding.LayoutBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainAdapter (private var userlist: ArrayList<UserData>) :
+class MainAdapter (private var userlist: ArrayList<DataUser>) :
     RecyclerView.Adapter<MainAdapter.Holder>(), Filterable
 {
-    private var userFilterList = ArrayList<UserData>()
+    private var userFilterList = ArrayList<DataUser>()
     private lateinit var maincontext: Context
     private var onItemClickCallback: OnItemClickCallback? = null
 
@@ -25,7 +25,7 @@ class MainAdapter (private var userlist: ArrayList<UserData>) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: UserData)
+        fun onItemClicked(dataUser: DataUser)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -50,21 +50,22 @@ class MainAdapter (private var userlist: ArrayList<UserData>) :
                 userFilterList = if (search.isEmpty()){
                     userlist
                 } else {
-                    val result = ArrayList<UserData>()
+                    val result = ArrayList<DataUser>()
                     for (row in userFilterList) {
                         if ((row.username.toString().toLowerCase(Locale.ROOT)
                                 .contains(search.toLowerCase(Locale.ROOT)))
                         ) {
                             result.add(
-                                UserData(
-                                    row.username,
-                                    row.name,
-                                    row.avatar,
-                                    row.company,
-                                    row.location,
-                                    row.repository,
-                                    row.followers,
-                                    row.following
+                                DataUser(
+                                        row.id,
+                                        row.username,
+                                        row.name,
+                                        row.avatar,
+                                        row.company,
+                                        row.location,
+                                        row.repository,
+                                        row.followers,
+                                        row.following
                                 )
                             )
                         }
@@ -77,7 +78,7 @@ class MainAdapter (private var userlist: ArrayList<UserData>) :
             }
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                userFilterList = results.values as ArrayList<UserData>
+                userFilterList = results.values as ArrayList<DataUser>
                 notifyDataSetChanged()
             }
         }
@@ -85,25 +86,25 @@ class MainAdapter (private var userlist: ArrayList<UserData>) :
 
     inner class Holder(private val binding: LayoutBinding) :
         RecyclerView.ViewHolder(binding.root){
-        fun bind(data: UserData) {
+        fun bind(dataUser: DataUser) {
             with(binding) {
                 Glide.with(itemView.context)
-                    .load(data.avatar)
-                    .apply(RequestOptions().override(55, 55))
+                    .load(dataUser.avatar)
                     .into(avatar)
-                username.text = data.username
-                name.text = data.name
-                location.text = data.location
+                username.text = dataUser.username
+                name.text = dataUser.name
+                location.text = dataUser.location
                 itemView.setOnClickListener {
-                    val userdata = UserData(
-                        data.username,
-                        data.name,
-                        data.avatar,
-                        data.company,
-                        data.location,
-                        data.repository,
-                        data.followers,
-                        data.following
+                    val userdata = DataUser(
+                            dataUser.id,
+                            dataUser.username,
+                            dataUser.name,
+                            dataUser.avatar,
+                            dataUser.company,
+                            dataUser.location,
+                            dataUser.repository,
+                            dataUser.followers,
+                            dataUser.following
                     )
                     val intent = Intent(maincontext,UserDetail::class.java)
                     intent.putExtra(UserDetail.EXTRA_DATA, userdata)

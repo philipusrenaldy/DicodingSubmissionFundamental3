@@ -8,4 +8,7 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="githubLogo">GithubLogo</string>
+    <string name="setting">Setting</string>
+    <string name="back_button">Back Button</string>
+    <string name="favorite">Favorite</string>
 </resources>

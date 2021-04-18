@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.submission.submission2">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <permission android:name="com.submission.submission2.READ_DATABASE" android:protectionLevel="normal" />
+    <permission android:name="com.submission.submission2.WRITE_DATABASE" android:protectionLevel="normal" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Submission2">
+        <provider
+            android:name=".provider.FavProvider"
+            android:authorities="com.submission.submission2"
+            android:enabled="true"
+            android:exported="true"
+            android:readPermission="com.submission.submission2.READ_DATABASE"
+            android:writePermission="com.submission.submission2.WRITE_DATABASE"/>
+        <receiver
+            android:name=".ReminderAlarm"
+            android:enabled="true"
+            android:exported="true" />
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".UserFavoriteActivity" />
         <activity
             android:name=".SplashScreenActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -19,6 +35,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".UserDetail" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
     </application>
+
 </manifest>

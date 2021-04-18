@@ -17,7 +17,7 @@ import org.json.JSONObject
 
 class FollowingFragment : Fragment() {
 
-    private var datalist: ArrayList<UserData> = ArrayList()
+    private var datalist: ArrayList<DataUser> = ArrayList()
     private lateinit var bind: FragmentFollowingBinding
     private lateinit var adapter: FollowingAdapter
     private val token = BuildConfig.GITHUB_TOKEN
@@ -34,7 +34,7 @@ class FollowingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = FollowingAdapter(datalist)
         datalist.clear()
-        val userdata = activity?.intent?.getParcelableExtra<UserData>(EXTRA_DATA) as UserData
+        val userdata = activity?.intent?.getParcelableExtra<DataUser>(EXTRA_DATA) as DataUser
         getData(userdata.username.toString())
     }
 
@@ -109,6 +109,7 @@ class FollowingFragment : Fragment() {
                 Log.d(TAG, result)
                 try {
                     val jsonObject = JSONObject(result)
+                    val id = jsonObject.getInt("id")
                     val username = jsonObject.getString("login").toString()
                     val name = jsonObject.getString("name").toString()
                     val avatar = jsonObject.getString("avatar_url").toString()
@@ -118,16 +119,17 @@ class FollowingFragment : Fragment() {
                     val followers = jsonObject.getString("followers")
                     val following = jsonObject.getString("following")
                     datalist.add(
-                        UserData(
-                            username,
-                            name,
-                            avatar,
-                            company,
-                            location,
-                            repository,
-                            followers,
-                            following
-                        )
+                            DataUser(
+                                    id,
+                                    username,
+                                    name,
+                                    avatar,
+                                    company,
+                                    location,
+                                    repository,
+                                    followers,
+                                    following
+                            )
                     )
                     rvList()
                 } catch (e: Exception) {
@@ -159,7 +161,7 @@ class FollowingFragment : Fragment() {
         val listDataAdapter = MainAdapter(datalist)
         bind.recyclerfollowing.adapter = adapter
         listDataAdapter.setOnItemClickCallback(object : MainAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: UserData) {
+            override fun onItemClicked(dataUser: DataUser) {
                 //No Implementation
             }
         })

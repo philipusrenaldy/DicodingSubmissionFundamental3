@@ -6,20 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.submission.submission2.databinding.FragmentFollowerBinding
 import cz.msebera.android.httpclient.Header
-import kotlinx.android.synthetic.main.fragmentlayout.*
 import org.json.JSONArray
 import org.json.JSONObject
 
 class FollowerFragment : Fragment() {
 
-    private var datalist: ArrayList<UserData> = ArrayList()
+    private var datalist: ArrayList<DataUser> = ArrayList()
     private lateinit var bind: FragmentFollowerBinding
     private lateinit var adapter: FollowerAdapter
     private val token = BuildConfig.GITHUB_TOKEN
@@ -36,7 +34,7 @@ class FollowerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = FollowerAdapter(datalist)
         datalist.clear()
-        val userdata = activity?.intent?.getParcelableExtra<UserData>(EXTRA_DATA) as UserData
+        val userdata = activity?.intent?.getParcelableExtra<DataUser>(EXTRA_DATA) as DataUser
         getData(userdata.username.toString())
     }
 
@@ -111,6 +109,7 @@ class FollowerFragment : Fragment() {
                 Log.d(TAG, result)
                 try {
                     val jsonObject = JSONObject(result)
+                    val id = jsonObject.getInt("id")
                     val username = jsonObject.getString("login").toString()
                     val name = jsonObject.getString("name").toString()
                     val avatar = jsonObject.getString("avatar_url").toString()
@@ -120,7 +119,8 @@ class FollowerFragment : Fragment() {
                     val followers = jsonObject.getString("followers")
                     val following = jsonObject.getString("following")
                     datalist.add(
-                            UserData(
+                            DataUser(
+                                    id,
                                     username,
                                     name,
                                     avatar,
@@ -160,7 +160,7 @@ class FollowerFragment : Fragment() {
         val listDataAdapter = MainAdapter(datalist)
         bind.recyclerfollower.adapter = adapter
         listDataAdapter.setOnItemClickCallback(object : MainAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: UserData) {
+            override fun onItemClicked(dataUser: DataUser) {
                 //No Implementation
             }
         })

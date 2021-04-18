@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -18,7 +20,7 @@ import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bind: ActivityMainBinding
-    private var userlist: ArrayList<UserData> = ArrayList()
+    private var userlist: ArrayList<DataUser> = ArrayList()
     private lateinit var homeadapter: MainAdapter
     private val token = BuildConfig.GITHUB_TOKEN
 
@@ -29,6 +31,28 @@ class MainActivity : AppCompatActivity() {
         rvAction()
         fundUser()
         getData()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.option_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.favorite -> {
+                val intent = Intent(this, UserFavoriteActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.setting -> {
+                val intent = Intent(this, SettingActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            else -> return true
+        }
     }
 
     private fun rvAction() {
@@ -173,6 +197,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, result)
                 try {
                     val jsonObject = JSONObject(result)
+                    val id = jsonObject.getInt("id")
                     val username = jsonObject.getString("login").toString()
                     val name = jsonObject.getString("name").toString()
                     val avatar = jsonObject.getString("avatar_url").toString()
@@ -182,16 +207,17 @@ class MainActivity : AppCompatActivity() {
                     val followers = jsonObject.getString("followers")
                     val following = jsonObject.getString("following")
                     userlist.add(
-                        UserData(
-                            username,
-                            name,
-                            avatar,
-                            company,
-                            location,
-                            repository,
-                            followers,
-                            following
-                        )
+                            DataUser(
+                                    id,
+                                    username,
+                                    name,
+                                    avatar,
+                                    company,
+                                    location,
+                                    repository,
+                                    followers,
+                                    following
+                            )
                     )
                     rvList()
                 } catch (e: Exception) {
@@ -224,25 +250,26 @@ class MainActivity : AppCompatActivity() {
         bind.recycler.adapter = homeadapter
 
         listDataAdapter.setOnItemClickCallback(object : MainAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: UserData) {
-                userSelect(data)
+            override fun onItemClicked(dataUser: DataUser) {
+                userSelect(dataUser)
             }
         })
     }
 
-    private fun userSelect(data: UserData) {
-        UserData(
-            data.username,
-            data.name,
-            data.avatar,
-            data.company,
-            data.location,
-            data.repository,
-            data.followers,
-            data.following
+    private fun userSelect(dataUser: DataUser) {
+        DataUser(
+                dataUser.id,
+                dataUser.username,
+                dataUser.name,
+                dataUser.avatar,
+                dataUser.company,
+                dataUser.location,
+                dataUser.repository,
+                dataUser.followers,
+                dataUser.following
         )
         val intent = Intent(this@MainActivity,UserDetail::class.java)
-        intent.putExtra(UserDetail.EXTRA_DATA, data)
+        intent.putExtra(UserDetail.EXTRA_DATA, dataUser)
         this.startActivity(intent)
         this@MainActivity.startActivity(intent)
     }

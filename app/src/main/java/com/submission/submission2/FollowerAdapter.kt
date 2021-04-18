@@ -6,34 +6,33 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.submission.submission2.databinding.FragmentlayoutBinding
 
-class FollowerAdapter(private val datalist: ArrayList<UserData>) :
+class FollowerAdapter(private val dataList: ArrayList<DataUser>) :
     RecyclerView.Adapter<FollowerAdapter.Holder>()
 {
     private lateinit var mainContext: Context
 
     inner class Holder(private val bind: FragmentlayoutBinding) : RecyclerView.ViewHolder(bind.root) {
-        fun bind(data: UserData) {
+        fun bind(dataUser: DataUser) {
             with(bind) {
                 Glide.with(itemView.context)
-                    .load(data.avatar)
-                    .apply(RequestOptions().override(55, 55))
+                    .load(dataUser.avatar)
                     .into(avatar)
-                username.text = data.username
-                name.text = data.name
-                location.text = data.location
+                username.text = dataUser.username
+                name.text = dataUser.name
+                location.text = dataUser.location
                 itemView.setOnClickListener {
-                    val userData = UserData(
-                        data.username,
-                        data.name,
-                        data.avatar,
-                        data.company,
-                        data.location,
-                        data.repository,
-                        data.followers,
-                        data.following
+                    val userData = DataUser(
+                            dataUser.id,
+                            dataUser.username,
+                            dataUser.name,
+                            dataUser.avatar,
+                            dataUser.company,
+                            dataUser.location,
+                            dataUser.repository,
+                            dataUser.followers,
+                            dataUser.following
                     )
                     val intent = Intent(mainContext, UserDetail::class.java)
                     intent.putExtra(UserDetail.EXTRA_DATA, userData)
@@ -49,10 +48,10 @@ class FollowerAdapter(private val datalist: ArrayList<UserData>) :
     }
 
     override fun onBindViewHolder(holder: FollowerAdapter.Holder, position: Int) {
-        holder.bind(datalist[position])
+        holder.bind(dataList[position])
     }
 
     override fun getItemCount(): Int {
-        return datalist.size
+        return dataList.size
     }
 }
