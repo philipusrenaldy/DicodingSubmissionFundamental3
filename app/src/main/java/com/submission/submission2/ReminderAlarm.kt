@@ -33,19 +33,12 @@ class ReminderAlarm : BroadcastReceiver() {
 
         val reminderTime = time.split(":").toTypedArray()
         val calendar = Calendar.getInstance()
-        calendar.apply {
-            set(Calendar.HOUR_OF_DAY, Integer.parseInt(reminderTime[0]))
-            set(Calendar.MINUTE, Integer.parseInt(reminderTime[1]))
-            set(Calendar.SECOND, 0)
-        }
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(reminderTime[0]))
+        calendar.set(Calendar.MINUTE, Integer.parseInt(reminderTime[1]))
+        calendar.set(Calendar.SECOND, 0)
 
         val pendingIntent = PendingIntent.getBroadcast(context, ID_REPEATING, intent, 0)
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
         Toast.makeText(context,"Reminder on at $time AM", Toast.LENGTH_SHORT).show()
     }
 
@@ -70,13 +63,9 @@ class ReminderAlarm : BroadcastReceiver() {
         Toast.makeText(context, "You Turn Off Reminder. For Best Experienced Please Turn On Again", Toast.LENGTH_LONG).show()
     }
 
-    private fun showNotification(
-        context: Context,
-        title: String,
-        reminderId: Int,
-        message: String
-    ) {
-        val channelId = "Channel 1"
+    private fun showNotification(context: Context, title: String, reminderId: Int, message: String)
+    {
+        val channelId = "Channel_1"
         val channelName = "Github Repeat Reminder"
         val notifyIntent = Intent(context, MainActivity::class.java)
         val notifyPendingIntent = PendingIntent.getActivity(context, ID_REPEATING, notifyIntent, 0)
