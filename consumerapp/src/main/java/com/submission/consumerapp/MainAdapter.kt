@@ -90,7 +90,6 @@ class MainAdapter (private var userlist: ArrayList<DataUser>) :
             with(binding) {
                 Glide.with(itemView.context)
                     .load(dataUser.avatar)
-                    .apply(RequestOptions().override(55, 55))
                     .into(avatar)
                 username.text = dataUser.username
                 name.text = dataUser.name

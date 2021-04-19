@@ -1,6 +1,5 @@
 package com.submission.submission2
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,11 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.submission.submission2.databinding.FragmentlayoutBinding
 
-class FollowerAdapter(private val dataList: ArrayList<DataUser>) :
-    RecyclerView.Adapter<FollowerAdapter.Holder>()
+class FollowerAdapter(private val dataList: ArrayList<DataUser>) : RecyclerView.Adapter<FollowerAdapter.Holder>()
 {
-    private lateinit var mainContext: Context
-
     inner class Holder(private val bind: FragmentlayoutBinding) : RecyclerView.ViewHolder(bind.root) {
         fun bind(dataUser: DataUser) {
             with(bind) {
@@ -34,9 +30,9 @@ class FollowerAdapter(private val dataList: ArrayList<DataUser>) :
                             dataUser.followers,
                             dataUser.following
                     )
-                    val intent = Intent(mainContext, UserDetail::class.java)
+                    val intent = Intent(itemView.context, UserDetail::class.java)
                     intent.putExtra(UserDetail.EXTRA_DATA, userData)
-                    mainContext.startActivity(intent)
+                    itemView.context.startActivity(intent)
                 }
             }
         }

@@ -1,25 +1,19 @@
 package com.submission.consumerapp
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.submission.consumerapp.databinding.FragmentlayoutBinding
 
-class FollowerAdapter(private val dataList: ArrayList<DataUser>) :
-    RecyclerView.Adapter<FollowerAdapter.Holder>()
+class FollowerAdapter(private val dataList: ArrayList<DataUser>) : RecyclerView.Adapter<FollowerAdapter.Holder>()
 {
-    private lateinit var mainContext: Context
-
     inner class Holder(private val bind: FragmentlayoutBinding) : RecyclerView.ViewHolder(bind.root) {
         fun bind(dataUser: DataUser) {
             with(bind) {
                 Glide.with(itemView.context)
                     .load(dataUser.avatar)
-                    .apply(RequestOptions().override(55, 55))
                     .into(avatar)
                 username.text = dataUser.username
                 name.text = dataUser.name
@@ -36,9 +30,9 @@ class FollowerAdapter(private val dataList: ArrayList<DataUser>) :
                             dataUser.followers,
                             dataUser.following
                     )
-                    val intent = Intent(mainContext, UserDetail::class.java)
+                    val intent = Intent(itemView.context, UserDetail::class.java)
                     intent.putExtra(UserDetail.EXTRA_DATA, userData)
-                    mainContext.startActivity(intent)
+                    itemView.context.startActivity(intent)
                 }
             }
         }

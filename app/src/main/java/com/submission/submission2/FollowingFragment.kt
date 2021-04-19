@@ -38,13 +38,13 @@ class FollowingFragment : Fragment() {
         getData(userdata.username.toString())
     }
 
-    private fun getData(id: String)
+    private fun getData(user_id: String)
     {
         bind.loadingfollowing.visibility = View.VISIBLE
         val client = AsyncHttpClient()
         client.addHeader("User-Agent", "request")
         client.addHeader("Authorization", token)
-        val url = "https://api.github.com/users/$id/following"
+        val url = "https://api.github.com/users/$user_id/following"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,
@@ -92,12 +92,12 @@ class FollowingFragment : Fragment() {
         })
     }
 
-    private fun getDetail(id: String) {
+    private fun getDetail(user_id: String) {
         bind.loadingfollowing.visibility = View.VISIBLE
         val client = AsyncHttpClient()
         client.addHeader("User-Agent", "request")
         client.addHeader("Authorization", token)
-        val url = "https://api.github.com/users/$id"
+        val url = "https://api.github.com/users/$user_id"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,

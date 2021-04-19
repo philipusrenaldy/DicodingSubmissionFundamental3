@@ -10,16 +10,17 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.submission.consumerapp.databinding.FragmentlayoutBinding
 
-class FollowingAdapter(private val datalist: ArrayList<DataUser>) : RecyclerView.Adapter<FollowingAdapter.Holder>()
+class FollowingAdapter(private val datalist: ArrayList<DataUser>) :
+        RecyclerView.Adapter<FollowingAdapter.Holder>()
 {
-    private lateinit var maincontext: Context
+    private lateinit var mainContext: Context
 
-    inner class Holder(private val bind: FragmentlayoutBinding) : RecyclerView.ViewHolder(bind.root) {
+    inner class Holder(private val bind: FragmentlayoutBinding) :
+            RecyclerView.ViewHolder(bind.root) {
         fun bind(dataUser: DataUser) {
             with(bind) {
                 Glide.with(itemView.context)
                     .load(dataUser.avatar)
-                    .apply(RequestOptions().override(55, 55))
                     .into(avatar)
                 username.text = dataUser.username
                 name.text = dataUser.name
@@ -36,10 +37,10 @@ class FollowingAdapter(private val datalist: ArrayList<DataUser>) : RecyclerView
                             dataUser.followers,
                             dataUser.following
                     )
-                    Toast.makeText(maincontext, dataUser.username, Toast.LENGTH_SHORT).show()
-                    val intent = Intent(maincontext, UserDetail::class.java)
+                    Toast.makeText(mainContext, dataUser.username, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(mainContext, UserDetail::class.java)
                     intent.putExtra(UserDetail.EXTRA_DATA, userdata)
-                    maincontext.startActivity(intent)
+                    mainContext.startActivity(intent)
                 }
             }
         }
@@ -47,6 +48,7 @@ class FollowingAdapter(private val datalist: ArrayList<DataUser>) : RecyclerView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowingAdapter.Holder {
         val bind = FragmentlayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        mainContext = parent.context
         return Holder(bind)
     }
 

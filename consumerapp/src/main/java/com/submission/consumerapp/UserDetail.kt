@@ -12,7 +12,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.submission.consumerapp.databinding.ActivityDetailBinding
 import com.submission.consumerapp.db.DBContract
 import com.submission.consumerapp.db.DBContract.favColumns.Companion.CONTENT_URI
-//import com.submission.consumerapp.db.FavHelper
 import com.submission.consumerapp.helper.MappingHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,15 +22,12 @@ class UserDetail : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var bind: ActivityDetailBinding
     private var isFav = false
-    //private lateinit var favHelper: FavHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(bind.root)
         supportActionBar?.hide()
-        //favHelper = FavHelper.getInstance(applicationContext)
-        //favHelper.open()
         setData()
         loadFavorite()
         viewPage()
@@ -41,20 +37,19 @@ class UserDetail : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?){
         val userData = intent.getParcelableExtra<DataUser>(EXTRA_DATA) as DataUser
         if (v?.id == R.id.btnFavorite){
-            val value = ContentValues()
+            val values = ContentValues()
             if (isFav) {
                 isFav = false
-                //favHelper.deleteById(userData.id)
             } else {
                 isFav = true
-                value.put(DBContract.favColumns.ID, userData.id)
-                value.put(DBContract.favColumns.USERNAME, userData.username)
-                value.put(DBContract.favColumns.NAME, userData.name)
-                value.put(DBContract.favColumns.AVATAR, userData.avatar)
-                value.put(DBContract.favColumns.COMPANY, userData.username)
-                value.put(DBContract.favColumns.LOCATION, userData.company)
-                value.put(DBContract.favColumns.REPOSITORY, userData.repository)
-                //favHelper.insertData(value)
+                values.put(DBContract.favColumns.ID, userData.id)
+                values.put(DBContract.favColumns.USERNAME, userData.username)
+                values.put(DBContract.favColumns.NAME, userData.name)
+                values.put(DBContract.favColumns.AVATAR, userData.avatar)
+                values.put(DBContract.favColumns.COMPANY, userData.username)
+                values.put(DBContract.favColumns.LOCATION, userData.company)
+                values.put(DBContract.favColumns.REPOSITORY, userData.repository)
+                contentResolver.insert(CONTENT_URI, values)
             }
         }
         loadFavorite()
@@ -63,10 +58,8 @@ class UserDetail : AppCompatActivity(), View.OnClickListener {
     private fun loadFavorite() {
         val userData = intent.getParcelableExtra<DataUser>(EXTRA_DATA) as DataUser
         GlobalScope.launch(Dispatchers.Main){
-            //val favHelper = FavHelper.getInstance(applicationContext)
-            //favHelper.open()
             val deferredFav = async(Dispatchers.IO){
-                val cursor = contentResolver.query(CONTENT_URI, null, null,null,null)
+                val cursor = contentResolver.query(CONTENT_URI, null, null, null, null)
                 MappingHelper.mapCursorToArrayList(cursor)
             }
             val favUser = deferredFav.await()
@@ -76,7 +69,6 @@ class UserDetail : AppCompatActivity(), View.OnClickListener {
             }
             chechFav()
         }
-        //favHelper.close()
     }
 
     private fun chechFav() {

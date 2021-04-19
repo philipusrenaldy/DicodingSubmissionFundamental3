@@ -20,6 +20,7 @@ class FollowerFragment : Fragment() {
     private var datalist: ArrayList<DataUser> = ArrayList()
     private lateinit var bind: FragmentFollowerBinding
     private lateinit var adapter: FollowerAdapter
+    private val token = BuildConfig.GITHUB_TOKEN
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -37,13 +38,13 @@ class FollowerFragment : Fragment() {
         getData(userdata.username.toString())
     }
 
-    private fun getData(id: String)
+    private fun getData(user_id: String)
     {
         bind.loadingfollowers.visibility = View.VISIBLE
         val client = AsyncHttpClient()
         client.addHeader("User-Agent", "request")
-        client.addHeader("Authorization", "token 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")
-        val url = "https://api.github.com/users/$id/followers"
+        client.addHeader("Authorization", token)
+        val url = "https://api.github.com/users/$user_id/followers"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                     statusCode: Int,
@@ -66,7 +67,6 @@ class FollowerFragment : Fragment() {
                             getDetail(username)
                         }
                     }
-
                 } catch (e: Exception) {
                     Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
                     e.printStackTrace()
@@ -91,12 +91,12 @@ class FollowerFragment : Fragment() {
         })
     }
 
-    private fun getDetail(id: String) {
+    private fun getDetail(user_id: String) {
         bind.loadingfollowers.visibility = View.VISIBLE
         val client = AsyncHttpClient()
         client.addHeader("User-Agent", "request")
-        client.addHeader("Authorization", "token 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")
-        val url = "https://api.github.com/users/$id"
+        client.addHeader("Authorization", token)
+        val url = "https://api.github.com/users/$user_id"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                     statusCode: Int,
